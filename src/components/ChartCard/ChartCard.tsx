@@ -1,7 +1,7 @@
 import {FC, ReactNode, useEffect, useState} from "react";
 import {Avatar, Card} from "antd";
 import axios from "axios";
-import {CommentOutlined, HeartOutlined, UserOutlined} from "@ant-design/icons";
+import {CommentOutlined, HeartFilled, UserOutlined} from "@ant-design/icons";
 
 const structureMetrics = {
     date: 'date',
@@ -58,7 +58,7 @@ interface ChartCardProps {
 
 export const ChartCard: FC<ChartCardProps> = ({structure, title, children, transformation, encodings}) => {
     const [data, setData] = useState<any>()
-
+    const [favourite, setFavourite] = useState(false)
     useEffect(() => {
         async function fetch() {
             const response = await fetchData(JSON.stringify(structure))
@@ -78,7 +78,9 @@ export const ChartCard: FC<ChartCardProps> = ({structure, title, children, trans
     return (
         <Card title={title} actions={[
             <Avatar icon={<UserOutlined />} size='small' key={'setting'}/>,
-            <HeartOutlined key={'favourite'}/>,
+            <HeartFilled key={'favourite'} onClick={() => setFavourite(!favourite)} style={{
+                color: favourite ? '#FF0000' : undefined
+            }}/>,
             <CommentOutlined key={'comment'}/>,
         ]} >
             {children(data, encodings, transformation)}
