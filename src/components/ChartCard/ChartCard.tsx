@@ -1,8 +1,10 @@
 import {FC, ReactNode, useEffect, useState} from "react";
-import {Avatar, Card} from "antd";
-import axios from "axios";
+import {Avatar, Card, Flex, Typography} from "antd";
 import {CommentOutlined, HeartFilled, UserOutlined} from "@ant-design/icons";
+import {fetchData} from "@/fetcher/dataFetcher";
+import {AxiosResponse} from "axios";
 
+const { Paragraph } = Typography
 const structureMetrics = {
     date: 'date',
     femaleDeaths28Days: 'femaleDeaths28Days',
@@ -16,21 +18,6 @@ const structureMetrics = {
 }
 
 export type StructureMetricsType = typeof structureMetrics;
-
-const fetchData = async (structure: string, latestBy?: string) => {
-    const url = 'https://api.coronavirus.data.gov.uk/v1/data'
-
-    const data = await axios.get(url, {
-        params: {
-            filters: 'areaType=nation;areaName=england',
-            structure: structure,
-            latestBy: latestBy
-        },
-        method: 'get'
-    })
-
-    return data
-}
 
 type EncodingKey = 'x' | 'y' | 'color'
 type Encoding = {
@@ -61,7 +48,7 @@ export const ChartCard: FC<ChartCardProps> = ({structure, title, children, trans
     const [favourite, setFavourite] = useState(false)
     useEffect(() => {
         async function fetch() {
-            const response = await fetchData(JSON.stringify(structure))
+            const response = await fetchData<any, AxiosResponse>(structure)
 
             if(response.data) {
                 setData(response.data.data)
@@ -72,7 +59,13 @@ export const ChartCard: FC<ChartCardProps> = ({structure, title, children, trans
     }, []);
 
     if(!data) {
-        return 'No Data'
+        return (
+            <Card title={title}>
+                <Flex align='center' justify='center'>
+                    <Paragraph>No data</Paragraph>
+                </Flex>
+            </Card>
+        )
     }
 
     return (

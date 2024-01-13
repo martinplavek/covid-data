@@ -40,15 +40,15 @@ export default function Home() {
                         <Flex justify='right' gap='small'>
                         <Button>
                             Export to PDF
-                            <DownloadOutlined color='green'/>
+                            <DownloadOutlined style={{color: 'green'}}/>
                         </Button>
                         <Button>
                             Notes (3)
-                            <CommentOutlined color='green' />
+                            <CommentOutlined style={{color: 'green'}} />
                         </Button>
                         <Button>
                             Filters&nbsp;<Badge size='small' count={9}/>
-                            <FilterOutlined color='green'/>
+                            <FilterOutlined style={{color: 'green'}}/>
                         </Button>
                         </Flex>
                     </Col>
