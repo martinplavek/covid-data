@@ -1,12 +1,8 @@
-import {MutableRefObject, Ref} from "react";
 import {Encoding, Transformation} from "@/types";
 import * as G2 from '@antv/g2';
-import {Simulate} from "react-dom/test-utils";
-import input = Simulate.input;
 import {Chart} from "@antv/g2";
 
 interface ChartFactoryInput {
-    // type: 'line' | 'donut',
     container: HTMLElement,
     encodings: Encoding[],
     transformation?: Transformation,

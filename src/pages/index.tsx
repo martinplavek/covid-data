@@ -13,11 +13,6 @@ const maleDeathsAfter28Days: Partial<StructureMetricsType> = {
     hospitalCases: 'hospitalCases',
 }
 
-const testCounts: Partial<StructureMetricsType> = {
-    date: 'date',
-    newCasesByPublishDate: 'newCasesByPublishDate',
-}
-
 const variants: Partial<StructureMetricsType> = {
     variants: 'variants'
 }
@@ -26,7 +21,9 @@ export default function Home() {
   return (
     <Layout style={{height: "99vh"}}>
       <Header style={{backgroundColor: 'white'}}>
-          App title
+          <Title level={3}>
+            App title
+          </Title>
       </Header>
         <Content style={{ margin: '0 16px',  }}>
             <div style={{
@@ -40,7 +37,7 @@ export default function Home() {
                         </Title>
                     </Col>
                     <Col span={10}>
-                        <Flex justify='right'>
+                        <Flex justify='right' gap='small'>
                         <Button>
                             Export to PDF
                             <DownloadOutlined color='green'/>

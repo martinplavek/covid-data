@@ -1,7 +1,7 @@
-import {FC, ReactNode, useEffect, useRef, useState} from "react";
+import {FC, ReactNode, useEffect, useState} from "react";
 import {Avatar, Card} from "antd";
 import axios from "axios";
-import {CommentOutlined, HeartOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons";
+import {CommentOutlined, HeartOutlined, UserOutlined} from "@ant-design/icons";
 
 const structureMetrics = {
     date: 'date',
@@ -56,8 +56,7 @@ interface ChartCardProps {
     children: (data: any, encodings: Encoding[], transformation?: Transformation | undefined) => ReactNode;
 }
 
-export const ChartCard: FC<ChartCardProps> = ({structure, containerId, title, children, transformation, encodings}) => {
-    const containerRef = useRef(null)
+export const ChartCard: FC<ChartCardProps> = ({structure, title, children, transformation, encodings}) => {
     const [data, setData] = useState<any>()
 
     useEffect(() => {
@@ -81,7 +80,7 @@ export const ChartCard: FC<ChartCardProps> = ({structure, containerId, title, ch
             <Avatar icon={<UserOutlined />} size='small' key={'setting'}/>,
             <HeartOutlined key={'favourite'}/>,
             <CommentOutlined key={'comment'}/>,
-        ]}>
+        ]} >
             {children(data, encodings, transformation)}
         </Card>
     )
