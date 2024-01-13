@@ -1,6 +1,5 @@
-import {FC, useEffect, useRef, useState} from "react";
+import {FC, ReactNode, useEffect, useRef, useState} from "react";
 import {Avatar, Card} from "antd";
-import * as G2 from '@antv/g2';
 import axios from "axios";
 import {CommentOutlined, HeartOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons";
 
@@ -11,18 +10,21 @@ const structureMetrics = {
     newCasesByPublishDate: 'newCasesByPublishDate',
     newDeathsByDeathDate: 'newDeathsByDeathDate',
     maleCases: 'maleCases',
-    hospitalCases: 'hospitalCases'
+    hospitalCases: 'hospitalCases',
+    newCasesBySpecimenDateRollingSum: 'newCasesBySpecimenDateRollingSum',
+    variants: 'variants'
 }
 
 export type StructureMetricsType = typeof structureMetrics;
 
-const fetchData = async (structure: string) => {
+const fetchData = async (structure: string, latestBy?: string) => {
     const url = 'https://api.coronavirus.data.gov.uk/v1/data'
 
     const data = await axios.get(url, {
         params: {
             filters: 'areaType=nation;areaName=england',
             structure: structure,
+            latestBy: latestBy
         },
         method: 'get'
     })
@@ -39,19 +41,22 @@ type Encoding = {
 type Transformation = {
     type: string,
     reverse?: boolean,
-    by: string,
-    order: 'ASC' | 'DESC'
+    by?: string,
+    orderBy?: string,
+    order?: 'ASC' | 'DESC',
+    ordinal?: boolean,
 }
 
 interface ChartCardProps {
     structure: Partial<StructureMetricsType>
-    containerId: string
     encodings: Encoding[]
+    transformation?: Transformation,
+    containerId: string
     title: string
-    transformation?: Transformation
+    children: (data: any, encodings: Encoding[], transformation?: Transformation | undefined) => ReactNode;
 }
 
-export const ChartCard: FC<ChartCardProps> = ({structure, containerId, encodings, transformation, title}) => {
+export const ChartCard: FC<ChartCardProps> = ({structure, containerId, title, children, transformation, encodings}) => {
     const containerRef = useRef(null)
     const [data, setData] = useState<any>()
 
@@ -67,26 +72,6 @@ export const ChartCard: FC<ChartCardProps> = ({structure, containerId, encodings
         fetch()
     }, []);
 
-    useEffect(() => {
-        if(containerRef.current && data) {
-            const chart = new G2.Chart({
-                container: containerRef.current,
-                height: 400,
-                width: 450,
-            })
-
-            chart.interval()
-            chart.data(data)
-            encodings.forEach((encoding) => {
-                chart.encode(encoding.key, encoding.value)
-            })
-            if(transformation){
-                chart.transform(transformation)
-            }
-            chart.render()
-        }
-    }, [containerRef, data]);
-
     if(!data) {
         return 'No Data'
     }
@@ -97,7 +82,7 @@ export const ChartCard: FC<ChartCardProps> = ({structure, containerId, encodings
             <HeartOutlined key={'favourite'}/>,
             <CommentOutlined key={'comment'}/>,
         ]}>
-            <div ref={containerRef} id={containerId}/>
+            {children(data, encodings, transformation)}
         </Card>
     )
 }

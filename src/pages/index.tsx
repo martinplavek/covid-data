@@ -1,7 +1,12 @@
-import {Col, Layout, Row, theme} from 'antd';
+import {Badge, Button, Col, Flex, Layout, Row, Typography} from 'antd';
 import {ChartCard, StructureMetricsType} from "@/components/ChartCard/ChartCard";
+import {DonutChart} from "@/components/DonnutChart/DonutChart";
+import {Encoding, Transformation} from "@/types";
+import {LineChart} from "@/components/LineChart/LineChart";
+import {CommentOutlined, DownloadOutlined, FilterOutlined} from "@ant-design/icons";
 
 const {Header, Content} = Layout
+const { Title } = Typography
 
 const maleDeathsAfter28Days: Partial<StructureMetricsType> = {
     date: 'date',
@@ -11,6 +16,10 @@ const maleDeathsAfter28Days: Partial<StructureMetricsType> = {
 const testCounts: Partial<StructureMetricsType> = {
     date: 'date',
     newCasesByPublishDate: 'newCasesByPublishDate',
+}
+
+const variants: Partial<StructureMetricsType> = {
+    variants: 'variants'
 }
 
 export default function Home() {
@@ -24,18 +33,47 @@ export default function Home() {
                 padding: 24,
                 minHeight: 360,
             }}>
-                <Row justify='space-around' style={{paddingBottom: "16px"}}>
+                <Row justify='space-around' style={{paddingBottom: "16px"}} align='middle'>
                     <Col span={10}>
-                        Page title
+                        <Title level={5}>
+                            Page title
+                        </Title>
                     </Col>
-                    <Col span={10}/>
+                    <Col span={10}>
+                        <Flex justify='right'>
+                        <Button>
+                            Export to PDF
+                            <DownloadOutlined color='green'/>
+                        </Button>
+                        <Button>
+                            Notes (3)
+                            <CommentOutlined color='green' />
+                        </Button>
+                        <Button>
+                            Filters&nbsp;<Badge size='small' count={9}/>
+                            <FilterOutlined color='green'/>
+                        </Button>
+                        </Flex>
+                    </Col>
                 </Row>
             <Row justify='space-around'>
                 <Col span={10} >
-                    <ChartCard structure={maleDeathsAfter28Days} containerId="hospitalCasesContainer" encodings={[{key: 'x', value: 'date'}, {key: 'y', value: 'hospitalCases'}]} title="Hospital cases"/>
+                    <ChartCard structure={maleDeathsAfter28Days} containerId={'hospitalCasesContainer'} title='Hospital cases' encodings={[{key: 'x', value: 'date'}, {key: 'y', value: 'hospitalCases'}]} transformation={{type: 'sortX'}}>
+                        {(data: any, encodings: Encoding[], transformation?: Transformation) => (
+                            <LineChart data={data} encodings={encodings} transformation={transformation}/>
+                        )}
+                    </ChartCard>
                 </Col>
                 <Col span={10}>
-                    <ChartCard structure={testCounts} containerId='testCountsContainer' encodings={[{key: 'x', value: 'date'}, {key: 'y', value: 'newCasesByPublishDate'}]} title="Test counts"/>
+                    <ChartCard structure={variants}
+                               containerId={'variants'}
+                               title='Variants share'
+                               encodings={[{key: 'color', value: 'variant'}, {key: 'y', value: 'newWeeklyPercentage'}, {key: 'x', value: 'variant'}]}
+                               transformation={{ type: 'stackY' }}>
+                        {(data: any, encodings: Encoding[], transformation?: Transformation) => (
+                            <DonutChart data={data} encodings={encodings} transformation={transformation}/>
+                        )}
+                    </ChartCard>
                 </Col>
             </Row>
             </div>
