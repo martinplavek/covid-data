@@ -1,5 +1,5 @@
 import {FC, ReactNode, useEffect, useState} from "react";
-import {Avatar, Card, Flex, Typography} from "antd";
+import {Avatar, Card, Flex, Spin, Typography} from "antd";
 import {CommentOutlined, HeartFilled, UserOutlined} from "@ant-design/icons";
 import {fetchData} from "@/fetcher/dataFetcher";
 import {AxiosResponse} from "axios";
@@ -45,18 +45,32 @@ interface ChartCardProps {
 
 export const ChartCard: FC<ChartCardProps> = ({structure, title, children, transformation, encodings}) => {
     const [data, setData] = useState<any>()
+    const [loading, setLoading] = useState(false)
     const [favourite, setFavourite] = useState(false)
+
     useEffect(() => {
         async function fetch() {
+            setLoading(true)
             const response = await fetchData<any, AxiosResponse>(structure)
 
             if(response.data) {
                 setData(response.data.data)
             }
+            setLoading(false)
         }
 
         fetch()
     }, []);
+
+    if(loading) {
+        return (
+            <Card title={title}>
+                <Flex align='center' justify='center'>
+                    <Spin />
+                </Flex>
+            </Card>
+        )
+    }
 
     if(!data) {
         return (
