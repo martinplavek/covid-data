@@ -1,14 +1,21 @@
 import {Badge, Button, Col, Flex, Row, Typography} from "antd";
-import {CommentOutlined, DownloadOutlined, FilterOutlined} from "@ant-design/icons";
-import {FC} from "react";
+import {FC, ReactNode} from "react";
 
 const { Title } = Typography
 
-type Props = {
-    pageTitle: string,
+type PageHeaderAction = {
+    title: ReactNode;
+    icon: ReactNode;
+    callback: () => void;
+    badgeValue?: number;
 }
 
-export const PageHeader: FC<Props> = ({pageTitle}) => {
+type Props = {
+    pageTitle: string,
+    actions?:PageHeaderAction []
+}
+
+export const PageHeader: FC<Props> = ({pageTitle, actions = []}) => {
 
     return (
         <Row justify='space-around' style={{paddingBottom: "16px"}} align='middle'>
@@ -19,18 +26,13 @@ export const PageHeader: FC<Props> = ({pageTitle}) => {
             </Col>
             <Col span={10}>
                 <Flex justify='right' gap='small'>
-                    <Button>
-                        Export to PDF
-                        <DownloadOutlined style={{color: 'green'}}/>
-                    </Button>
-                    <Button>
-                        Notes (3)
-                        <CommentOutlined style={{color: 'green'}} />
-                    </Button>
-                    <Button>
-                        Filters&nbsp;<Badge size='small' count={9}/>
-                        <FilterOutlined style={{color: 'green'}}/>
-                    </Button>
+                    {actions.map(action => (
+                        <Button onClick={action.callback}>
+                            {action.title}
+                            {action.badgeValue ? <Badge size='small' count={action.badgeValue}/> : null}
+                            {action.icon}
+                        </Button>
+                    ))}
                 </Flex>
             </Col>
         </Row>
