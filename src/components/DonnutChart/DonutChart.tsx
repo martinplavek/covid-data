@@ -2,20 +2,21 @@ import {FC, useEffect, useRef} from "react";
 import {createDonutChart} from "@/factories/chartFactory";
 import {Encoding, Transformation} from "@/types";
 import {Chart} from "@antv/g2";
+import {VariantsResponse} from "@/fetcher/dataFetcher";
 
 export const DonutChart: FC<{
-    data: any
+    data: VariantsResponse
     encodings: Encoding[],
     transformation?: Transformation
 }> = ({data, encodings, transformation}) => {
     const containerRef = useRef<HTMLDivElement>(null)
     useEffect(() => {
         let chart: Chart
+        console.log('data', data)
         if(containerRef.current !== null && data) {
-            console.log(data[0].variants)
             chart = createDonutChart({
                 container: containerRef.current,
-                data: data[0].variants,
+                data: data.data[0].variants,
                 encodings,
                 transformation
             })

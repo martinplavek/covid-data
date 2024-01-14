@@ -1,23 +1,19 @@
 import {Badge, Button, Col, Flex, Layout, Row, Typography} from 'antd';
-import {ChartCard, StructureMetricsType} from "@/components/ChartCard/ChartCard";
-import {DonutChart} from "@/components/DonnutChart/DonutChart";
-import {Encoding, Transformation} from "@/types";
-import {LineChart} from "@/components/LineChart/LineChart";
+import {ChartCard} from "@/components/ChartCard/ChartCard";
 import {CommentOutlined, DownloadOutlined, FilterOutlined} from "@ant-design/icons";
+import {useApplicationInit} from "@/hooks/useApplicationInit";
+import {getChartTypeMapping} from "@/hooks/useCharts";
+import camelCase from 'lodash/camelCase'
 
 const {Header, Content} = Layout
 const { Title } = Typography
 
-const maleDeathsAfter28Days: Partial<StructureMetricsType> = {
-    date: 'date',
-    hospitalCases: 'hospitalCases',
-}
-
-const variants: Partial<StructureMetricsType> = {
-    variants: 'variants'
-}
-
 export default function Home() {
+
+    const {data, isLoading} = useApplicationInit()
+    const components = getChartTypeMapping(data)
+
+    console.log(components)
   return (
     <Layout style={{height: "99vh"}}>
       <Header style={{backgroundColor: 'white'}}>
@@ -54,24 +50,14 @@ export default function Home() {
                     </Col>
                 </Row>
             <Row justify='space-around'>
-                <Col span={10} >
-                    <ChartCard structure={maleDeathsAfter28Days} containerId={'hospitalCasesContainer'} title='Hospital cases' encodings={[{key: 'x', value: 'date'}, {key: 'y', value: 'hospitalCases'}]} transformation={{type: 'sortX'}}>
-                        {(data: any, encodings: Encoding[], transformation?: Transformation) => (
-                            <LineChart data={data} encodings={encodings} transformation={transformation}/>
-                        )}
-                    </ChartCard>
-                </Col>
-                <Col span={10}>
-                    <ChartCard structure={variants}
-                               containerId={'variants'}
-                               title='Variants share'
-                               encodings={[{key: 'color', value: 'variant'}, {key: 'y', value: 'newWeeklyPercentage'}, {key: 'x', value: 'variant'}]}
-                               transformation={{ type: 'stackY' }}>
-                        {(data: any, encodings: Encoding[], transformation?: Transformation) => (
-                            <DonutChart data={data} encodings={encodings} transformation={transformation}/>
-                        )}
-                    </ChartCard>
-                </Col>
+                {components.map(item => (
+                        <Col span={10}>
+                            <ChartCard title={item.title} containerId={camelCase(item.title)}>
+                                <item.Component data={item.data} encodings={item.encodings} transformation={item.transformation} />
+                            </ChartCard>
+                        </Col>
+
+                )   )}
             </Row>
             </div>
         </Content>

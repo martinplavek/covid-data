@@ -2,10 +2,11 @@ import {FC, useEffect, useRef} from "react";
 import { createLineChart} from "@/factories/chartFactory";
 import {Encoding, Transformation} from "@/types";
 import {Chart} from "@antv/g2";
+import {HospitalCasesResponse} from "@/fetcher/dataFetcher";
 
 
 export const LineChart: FC<{
-    data: any
+    data: HospitalCasesResponse
     encodings: Encoding[],
     transformation?: Transformation
 }> = ({data, encodings, transformation}) => {
@@ -15,7 +16,7 @@ export const LineChart: FC<{
         if(containerRef.current !== null && data) {
             chart = createLineChart({
                 container: containerRef.current,
-                data,
+                data: data.data,
                 encodings,
                 transformation
             })
