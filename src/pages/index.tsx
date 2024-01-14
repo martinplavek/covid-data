@@ -50,8 +50,8 @@ export default function Home() {
                     </Col>
                 </Row>
             <Row justify='space-around'>
-                {components.map(item => (
-                        <Col span={10}>
+                {components.map((item, index) => (
+                        <Col span={10} key={`${item.title}-${index}`}>
                             <ChartCard title={item.title} containerId={camelCase(item.title)}>
                                 <item.Component data={item.data} encodings={item.encodings} transformation={item.transformation} />
                             </ChartCard>
