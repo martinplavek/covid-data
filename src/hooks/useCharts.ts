@@ -9,11 +9,15 @@ import {DonutChart} from "@/components/DonnutChart/DonutChart";
 import {Encoding, Transformation} from "@/types";
 import {ComponentType} from "react";
 
-interface ChartTypeMapping {
+export interface ChartTypeMapping {
     Component: ComponentType<any>;
     encodings: Encoding[];
     transformation?: Transformation;
     title: string;
+}
+
+export type ChartTypeMappingWithData = ChartTypeMapping & {
+    data: HospitalCasesResponse | VariantsResponse
 }
 
 export const chartByType = (type: HospitalCasesResponse | VariantsResponse): ChartTypeMapping => {
@@ -38,8 +42,7 @@ export const chartByType = (type: HospitalCasesResponse | VariantsResponse): Cha
 
 }
 
-
-export const getChartTypeMapping = (data: Array<HospitalCasesResponse | VariantsResponse>) => {
+export const getChartTypeMapping = (data: Array<HospitalCasesResponse | VariantsResponse>): ChartTypeMappingWithData[] => {
     return data.map((response: HospitalCasesResponse | VariantsResponse) => {
         const chartProps = chartByType(response)
         return {

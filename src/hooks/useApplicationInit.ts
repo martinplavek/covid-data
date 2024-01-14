@@ -3,10 +3,13 @@ import {hospitalCases, variants} from "@/fetcher/definitions";
 import {AxiosResponse} from "axios";
 import {useEffect, useState} from "react";
 
+const APP_TITLE = "Homework Martin Plavek"
 
 export const useApplicationInit = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [data, setData] = useState<(HospitalCasesResponse | VariantsResponse)[]>([])
+    const [currentPage] = useState("Covid data visualization")
+
     useEffect(() => {
         async function fetch() {
             setIsLoading(true)
@@ -24,6 +27,8 @@ export const useApplicationInit = () => {
 
     return {
         data,
-        isLoading
+        isLoading,
+        appTitle: APP_TITLE,
+        currentPage,
     }
 }
