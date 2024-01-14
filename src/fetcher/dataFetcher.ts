@@ -12,42 +12,6 @@ interface Filter {
 const DEFAULT_AREA_TYPE = 'nation'
 const DEFAULT_AREA_NAME = 'england'
 
-type Variant = {
-    variant: string;
-    cumWeeklySequenced: number;
-    newWeeklyPercentage: number;
-}
-
-export type VariantsWrapper = {
-    variants: Variant[]
-}
-
-const isVariantWrapper = (obj: any): obj is Variant => obj.variant
-
-export type VariantsResponse = {
-    data: VariantsWrapper[]
-}
-
-export const isVariantResponse = (obj: any): obj is VariantsResponse => {
-    return isVariantWrapper(obj.data[0].variants[0])
-};
-
-
-type HospitalCase = {
-    date: string;
-    hospitalCases: number;
-}
-
-export type HospitalCasesResponse = {
-    data: HospitalCase[]
-}
-
-const isHospitalCase = (obj: any): obj is HospitalCase => obj.hospitalCases
-
-export const isHospitalCasesResponse = (obj: any): obj is HospitalCasesResponse => {
-    return isHospitalCase(obj.data[0])
-};
-
 const filter = (userFilters?: Filter[]) => {
     const defaultFilter = `areaType=${DEFAULT_AREA_TYPE};areaName=${DEFAULT_AREA_NAME}`
     const userFilterMapping = userFilters?.map(filter => `${filter.type}=${filter.value}`) ?? []

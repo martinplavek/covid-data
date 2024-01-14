@@ -3,7 +3,7 @@ import {
     isHospitalCasesResponse,
     isVariantResponse,
     VariantsResponse
-} from "@/fetcher/dataFetcher";
+} from "@/types";
 import {LineChart} from "@/components/LineChart/LineChart";
 import {DonutChart} from "@/components/DonnutChart/DonutChart";
 import {Encoding, Transformation} from "@/types";

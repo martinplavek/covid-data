@@ -4,11 +4,13 @@ import {Encoding, Transformation} from "@/types";
 import {Chart} from "@antv/g2";
 import {VariantsResponse} from "@/fetcher/dataFetcher";
 
-export const DonutChart: FC<{
+type Props = {
     data: VariantsResponse
     encodings: Encoding[],
     transformation?: Transformation
-}> = ({data, encodings, transformation}) => {
+}
+
+export const DonutChart: FC<Props> = ({data, encodings, transformation}) => {
     const containerRef = useRef<HTMLDivElement>(null)
     useEffect(() => {
         let chart: Chart

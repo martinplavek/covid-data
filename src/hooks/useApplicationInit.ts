@@ -1,7 +1,8 @@
-import {fetchData, HospitalCasesResponse, VariantsResponse} from "@/fetcher/dataFetcher";
+import {fetchData} from "@/fetcher/dataFetcher";
 import {hospitalCases, variants} from "@/fetcher/definitions";
 import {AxiosResponse} from "axios";
 import {useEffect, useState} from "react";
+import {HospitalCasesResponse, VariantsResponse} from "@/types";
 
 const APP_TITLE = "Homework Martin Plavek"
 
