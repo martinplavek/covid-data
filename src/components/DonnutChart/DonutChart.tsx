@@ -2,7 +2,7 @@ import {FC, useEffect, useRef} from "react";
 import {createDonutChart} from "@/factories/chartFactory";
 import {Encoding, Transformation} from "@/types";
 import {Chart} from "@antv/g2";
-import {VariantsResponse} from "@/fetcher/dataFetcher";
+import {VariantsResponse} from "@/types";
 
 type Props = {
     data: VariantsResponse
@@ -27,7 +27,7 @@ export const DonutChart: FC<Props> = ({data, encodings, transformation}) => {
         return () => {
             chart?.destroy()
         }
-    }, [containerRef, data]);
+    }, [containerRef, data, encodings, transformation]);
 
     return (
         <div ref={containerRef} />

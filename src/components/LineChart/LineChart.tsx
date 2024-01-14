@@ -2,7 +2,7 @@ import {FC, useEffect, useRef} from "react";
 import { createLineChart} from "@/factories/chartFactory";
 import {Encoding, Transformation} from "@/types";
 import {Chart} from "@antv/g2";
-import {HospitalCasesResponse} from "@/fetcher/dataFetcher";
+import {HospitalCasesResponse} from "@/types";
 
 
 export const LineChart: FC<{
@@ -24,7 +24,7 @@ export const LineChart: FC<{
         return () => {
             chart?.destroy()
         }
-    }, [containerRef, data]);
+    }, [containerRef, data, encodings, transformation]);
 
     return (
         <div ref={containerRef} />

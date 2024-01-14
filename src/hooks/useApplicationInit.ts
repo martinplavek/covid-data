@@ -24,7 +24,7 @@ export const useApplicationInit = () => {
             setIsLoading(false)
         }
         fetch()
-    }, [hospitalCases, variants]);
+    }, []);
 
     return {
         data,
