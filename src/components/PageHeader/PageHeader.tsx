@@ -4,7 +4,7 @@ import {FC, ReactNode} from "react";
 const { Title } = Typography
 
 type PageHeaderAction = {
-    title: ReactNode;
+    title: string;
     icon: ReactNode;
     callback: () => void;
     badgeValue?: number;
@@ -27,7 +27,7 @@ export const PageHeader: FC<Props> = ({pageTitle, actions = []}) => {
             <Col span={10}>
                 <Flex justify='right' gap='small'>
                     {actions.map(action => (
-                        <Button onClick={action.callback}>
+                        <Button onClick={action.callback} key={action.title}>
                             {action.title}
                             {action.badgeValue ? <Badge size='small' count={action.badgeValue}/> : null}
                             {action.icon}
